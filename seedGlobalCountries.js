@@ -1,0 +1,329 @@
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+const Country = require("./models/Country");
+
+dotenv.config();
+
+/*
+=========================================================
+ATLYS - GLOBAL COUNTRIES
+193 UN MEMBER STATES + PALESTINE + VATICAN CITY
+=========================================================
+*/
+
+const countries = [
+  ["Afghanistan", "AF"],
+  ["Albania", "AL"],
+  ["Algeria", "DZ"],
+  ["Andorra", "AD"],
+  ["Angola", "AO"],
+  ["Antigua and Barbuda", "AG"],
+  ["Argentina", "AR"],
+  ["Armenia", "AM"],
+  ["Australia", "AU"],
+  ["Austria", "AT"],
+  ["Azerbaijan", "AZ"],
+
+  ["Bahamas", "BS"],
+  ["Bahrain", "BH"],
+  ["Bangladesh", "BD"],
+  ["Barbados", "BB"],
+  ["Belarus", "BY"],
+  ["Belgium", "BE"],
+  ["Belize", "BZ"],
+  ["Benin", "BJ"],
+  ["Bhutan", "BT"],
+  ["Bolivia", "BO"],
+  ["Bosnia and Herzegovina", "BA"],
+  ["Botswana", "BW"],
+  ["Brazil", "BR"],
+  ["Brunei", "BN"],
+  ["Bulgaria", "BG"],
+  ["Burkina Faso", "BF"],
+  ["Burundi", "BI"],
+
+  ["Cabo Verde", "CV"],
+  ["Cambodia", "KH"],
+  ["Cameroon", "CM"],
+  ["Canada", "CA"],
+  ["Central African Republic", "CF"],
+  ["Chad", "TD"],
+  ["Chile", "CL"],
+  ["China", "CN"],
+  ["Colombia", "CO"],
+  ["Comoros", "KM"],
+  ["Republic of the Congo", "CG"],
+  ["Costa Rica", "CR"],
+  ["Côte d'Ivoire", "CI"],
+  ["Croatia", "HR"],
+  ["Cuba", "CU"],
+  ["Cyprus", "CY"],
+  ["Czechia", "CZ"],
+
+  ["Democratic Republic of the Congo", "CD"],
+  ["Denmark", "DK"],
+  ["Djibouti", "DJ"],
+  ["Dominica", "DM"],
+  ["Dominican Republic", "DO"],
+
+  ["Ecuador", "EC"],
+  ["Egypt", "EG"],
+  ["El Salvador", "SV"],
+  ["Equatorial Guinea", "GQ"],
+  ["Eritrea", "ER"],
+  ["Estonia", "EE"],
+  ["Eswatini", "SZ"],
+  ["Ethiopia", "ET"],
+
+  ["Fiji", "FJ"],
+  ["Finland", "FI"],
+  ["France", "FR"],
+
+  ["Gabon", "GA"],
+  ["Gambia", "GM"],
+  ["Georgia", "GE"],
+  ["Germany", "DE"],
+  ["Ghana", "GH"],
+  ["Greece", "GR"],
+  ["Grenada", "GD"],
+  ["Guatemala", "GT"],
+  ["Guinea", "GN"],
+  ["Guinea-Bissau", "GW"],
+  ["Guyana", "GY"],
+
+  ["Haiti", "HT"],
+  ["Honduras", "HN"],
+  ["Hungary", "HU"],
+
+  ["Iceland", "IS"],
+  ["India", "IN"],
+  ["Indonesia", "ID"],
+  ["Iran", "IR"],
+  ["Iraq", "IQ"],
+  ["Ireland", "IE"],
+  ["Israel", "IL"],
+  ["Italy", "IT"],
+
+  ["Jamaica", "JM"],
+  ["Japan", "JP"],
+  ["Jordan", "JO"],
+
+  ["Kazakhstan", "KZ"],
+  ["Kenya", "KE"],
+  ["Kiribati", "KI"],
+  ["Kuwait", "KW"],
+  ["Kyrgyzstan", "KG"],
+
+  ["Laos", "LA"],
+  ["Latvia", "LV"],
+  ["Lebanon", "LB"],
+  ["Lesotho", "LS"],
+  ["Liberia", "LR"],
+  ["Libya", "LY"],
+  ["Liechtenstein", "LI"],
+  ["Lithuania", "LT"],
+  ["Luxembourg", "LU"],
+
+  ["Madagascar", "MG"],
+  ["Malawi", "MW"],
+  ["Malaysia", "MY"],
+  ["Maldives", "MV"],
+  ["Mali", "ML"],
+  ["Malta", "MT"],
+  ["Marshall Islands", "MH"],
+  ["Mauritania", "MR"],
+  ["Mauritius", "MU"],
+  ["Mexico", "MX"],
+  ["Micronesia", "FM"],
+  ["Moldova", "MD"],
+  ["Monaco", "MC"],
+  ["Mongolia", "MN"],
+  ["Montenegro", "ME"],
+  ["Morocco", "MA"],
+  ["Mozambique", "MZ"],
+  ["Myanmar", "MM"],
+
+  ["Namibia", "NA"],
+  ["Nauru", "NR"],
+  ["Nepal", "NP"],
+  ["Netherlands", "NL"],
+  ["New Zealand", "NZ"],
+  ["Nicaragua", "NI"],
+  ["Niger", "NE"],
+  ["Nigeria", "NG"],
+  ["North Korea", "KP"],
+  ["North Macedonia", "MK"],
+  ["Norway", "NO"],
+
+  ["Oman", "OM"],
+
+  ["Pakistan", "PK"],
+  ["Palau", "PW"],
+  ["Palestine", "PS"],
+  ["Panama", "PA"],
+  ["Papua New Guinea", "PG"],
+  ["Paraguay", "PY"],
+  ["Peru", "PE"],
+  ["Philippines", "PH"],
+  ["Poland", "PL"],
+  ["Portugal", "PT"],
+
+  ["Qatar", "QA"],
+
+  ["Romania", "RO"],
+  ["Russia", "RU"],
+  ["Rwanda", "RW"],
+
+  ["Saint Kitts and Nevis", "KN"],
+  ["Saint Lucia", "LC"],
+  ["Saint Vincent and the Grenadines", "VC"],
+  ["Samoa", "WS"],
+  ["San Marino", "SM"],
+  ["São Tomé and Príncipe", "ST"],
+  ["Saudi Arabia", "SA"],
+  ["Senegal", "SN"],
+  ["Serbia", "RS"],
+  ["Seychelles", "SC"],
+  ["Sierra Leone", "SL"],
+  ["Singapore", "SG"],
+  ["Slovakia", "SK"],
+  ["Slovenia", "SI"],
+  ["Solomon Islands", "SB"],
+  ["Somalia", "SO"],
+  ["South Africa", "ZA"],
+  ["South Korea", "KR"],
+  ["South Sudan", "SS"],
+  ["Spain", "ES"],
+  ["Sri Lanka", "LK"],
+  ["Sudan", "SD"],
+  ["Suriname", "SR"],
+  ["Sweden", "SE"],
+  ["Switzerland", "CH"],
+  ["Syria", "SY"],
+
+  ["Tajikistan", "TJ"],
+  ["Tanzania", "TZ"],
+  ["Thailand", "TH"],
+  ["Timor-Leste", "TL"],
+  ["Togo", "TG"],
+  ["Tonga", "TO"],
+  ["Trinidad and Tobago", "TT"],
+  ["Tunisia", "TN"],
+  ["Türkiye", "TR"],
+  ["Turkmenistan", "TM"],
+  ["Tuvalu", "TV"],
+
+  ["Uganda", "UG"],
+  ["Ukraine", "UA"],
+  ["United Arab Emirates", "AE"],
+  ["United Kingdom", "GB"],
+  ["United States", "US"],
+  ["Uruguay", "UY"],
+  ["Uzbekistan", "UZ"],
+
+  ["Vanuatu", "VU"],
+  ["Vatican City", "VA"],
+  ["Venezuela", "VE"],
+  ["Vietnam", "VN"],
+
+  ["Yemen", "YE"],
+
+  ["Zambia", "ZM"],
+  ["Zimbabwe", "ZW"]
+];
+
+
+/* =========================================================
+   FLAG GENERATOR
+========================================================= */
+
+function getFlag(code) {
+  return code
+    .toUpperCase()
+    .split("")
+    .map(
+      (char) =>
+        String.fromCodePoint(
+          127397 + char.charCodeAt(0)
+        )
+    )
+    .join("");
+}
+
+
+/* =========================================================
+   SEED
+========================================================= */
+
+async function seedCountries() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+
+    console.log("");
+    console.log("=================================");
+    console.log("ATLYS GLOBAL COUNTRIES");
+    console.log("=================================");
+
+    let count = 0;
+
+    for (const [name, code] of countries) {
+      const flag = getFlag(code);
+
+      await Country.findOneAndUpdate(
+        { code },
+        {
+          name,
+          code,
+          flag,
+          description:
+            `Explore travel information, destinations and visa options for ${name}.`,
+          popular: false,
+          active: true
+        },
+        {
+          new: true,
+          upsert: true,
+          setDefaultsOnInsert: true
+        }
+      );
+
+      count++;
+
+      console.log(
+        `${String(count).padStart(3, "0")} ✓ ${flag} ${name}`
+      );
+    }
+
+    console.log("");
+    console.log(
+      `Total countries added/updated: ${count}`
+    );
+
+    console.log("");
+    console.log(
+      "✓ Global country database ready"
+    );
+
+    console.log("=================================");
+    console.log("");
+
+    await mongoose.disconnect();
+
+    process.exit(0);
+
+  } catch (error) {
+    console.error("");
+    console.error("❌ Country seed error:");
+    console.error(error.message);
+    console.error("");
+
+    try {
+      await mongoose.disconnect();
+    } catch (e) {}
+
+    process.exit(1);
+  }
+}
+
+seedCountries();
