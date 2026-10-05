@@ -1,7 +1,7 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const Country = require("../models/Country");
+const Country = require("../models/country");
 const { uploadToBunny } = require("../utils/bunnyStorage");
 
 
